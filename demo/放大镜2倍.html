@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+</head>
+
+<body>
+
+
+    <style>
+        .xxx {
+            display: flex;
+        }
+
+        .stage {
+            width: 400px;
+            height: 400px;
+            position: relative;
+        }
+
+        .stage:hover {
+            cursor: zoom-in;
+        }
+
+        .stage img {
+            width: 100%;
+        }
+
+        .stage .mask {
+            width: 200px;
+            height: 200px;
+            background-image: url("./mask-bg.png");
+            /* background-color: rgba(255, 0, 0, 0.342); */
+            position: absolute;
+            top: 0px;
+            left: 0px;
+        }
+
+        .preview {
+            width: 400px;
+            height: 400px;
+            box-shadow: 0 0 5px 0 rgb(153, 153, 153);
+            overflow: hidden;
+            margin-left: 20px;
+            position: relative;
+        }
+
+        .preview img {
+            width: 200%;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+    </style>
+
+    <div class="xxx">
+        <div class="stage">
+            <img src="./banner1.jpg" alt="" />
+            <div class="mask"></div>
+        </div>
+        <div class="preview">
+            <img src="./banner1.jpg" alt="" />
+        </div>
+    </div>
+
+    <select name="" id="optionSelector">
+        <option value="">请选择</option>
+        <option value="2" selected>2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+    </select>
+
+    <div class="p"><b>内部文字</b></div>
+
+    <script>
+        var stage = document.querySelector(".stage");
+        var mask = document.querySelector(".mask");
+        var preview = document.querySelector(".preview img");
+        var p = document.querySelector(".p");
+
+
+        //变量名提升
+        var maskX = 0;
+        var maskY = 0;
+        var selectedValue=0;
+
+        var select = document.querySelector("select");
+        select.onchange = function () {
+            console.log(this.value, typeof this.value);
+            p.innerText = this.value;
+        };
+
+        // 获取下拉列表元素  
+        var selectElement = document.getElementById('optionSelector');
+
+        // 添加 change 事件监听器  
+        selectElement.addEventListener('change', function () {
+            // 获取所选值  
+            selectedValue = selectElement.value;
+
+
+            // 获取所有匹配 .stage .mask 选择器的元素  
+            var masks = document.querySelectorAll('.stage .mask');
+            var imgs = document.querySelectorAll('.preview img');
+            // 遍历这些元素并根据所选值修改它们的样式  
+            masks.forEach(function (mask) {
+                switch (selectedValue) {
+                    case '3':
+                        mask.style.width = '133px';
+                        mask.style.height = '133px';
+                        break;
+                    case '4':
+                        mask.style.width = '100px';
+                        mask.style.height = '100px';
+                        break;
+                    case '5':
+                        mask.style.width = '77px';
+                        mask.style.height = '77px';
+                        break;
+                    default:
+                        // 如果未选择任何特定选项或选择了一个未处理的选项，可以重置样式  
+                        mask.style.width = '200px'; // 或其他默认值  
+                        mask.style.height = '200px'; // 或其他默认值  
+                        break;
+                }
+            });
+
+            imgs.forEach(function (img) {
+                switch (selectedValue) {
+                    case '3':
+                        img.style.width = '300%';
+                        break;
+                    case '4':
+                        img.style.width = '400%';
+                        break;
+                    case '5':
+                        img.style.width = '513%';
+                        break;
+                    // 你可以根据需要添加更多的 case 分支  
+                    // 例如，为 value="2" 和 value="3" 设置不同的样式  
+                    default:
+                        // 如果未选择任何特定选项或选择了一个未处理的选项，可以重置样式  
+                        img.style.width = '200%'; // 或其他默认值  
+                        break;
+                }
+            });
+        });
+
+
+        
+        // onmousemove  over out   move移动
+        stage.onmousemove = function (event) {
+            // console.log(event.offsetX);
+            // console.log(event.clientX - stage.offsetLeft);
+            var x = event.clientX - stage.offsetLeft;
+            var y = event.clientY - stage.offsetTop;
+            console.log(x, y);
+            // 鼠标的位置
+
+
+            // mask左上角
+            maskX = x - 50;
+            maskY = y - 50;
+            if (maskX < 0) {
+                maskX = 0;
+            }
+            if (maskX > stage.offsetWidth - mask.offsetWidth) {
+                maskX = stage.offsetWidth - mask.offsetWidth;
+            }
+            if (maskY < 0) {
+                maskY = 0;
+            }
+            if (maskY > stage.offsetHeight - mask.offsetHeight) {
+                maskY = stage.offsetHeight - mask.offsetHeight;
+            }
+
+            mask.style.left = maskX + "px";
+            mask.style.top = maskY + "px";
+            // mask左上角的位置
+
+
+            preview.style.left = -maskX * selectedValue + "px";
+            preview.style.top = -maskY * selectedValue + "px";
+        
+            console.log(selectedValue);
+
+        };
+
+
+    
+
+    </script>
+</body>
+
+</html>

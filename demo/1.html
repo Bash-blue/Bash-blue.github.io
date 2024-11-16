@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <select name="" id="optionSelector">
+        <option value="">请选择</option>
+        <option value="2" selected>2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+    </select>
+
+    <script>
+        var stage = document.querySelector(".stage");
+        var mask = document.querySelector(".mask");
+        var preview = document.querySelector(".preview img");
+        var p = document.querySelector(".p");
+
+        //变量名提升
+        var maskX = 0;  
+        var maskY = 0;
+
+        // onmousemove  over out   move移动
+        stage.onmousemove = function (event) {
+            // console.log(event.offsetX);
+            // console.log(event.clientX - stage.offsetLeft);
+            var x = event.clientX - stage.offsetLeft;
+            var y = event.clientY - stage.offsetTop;
+            console.log(x, y);
+            // 鼠标的位置
+
+
+            // mask左上角
+            maskX = x - 100;
+            maskY = y - 100;
+            if (maskX < 0) {
+                maskX = 0;
+            }
+            if (maskX > stage.offsetWidth - mask.offsetWidth) {
+                maskX = stage.offsetWidth - mask.offsetWidth;
+            }
+            if (maskY < 0) {
+                maskY = 0;
+            }
+            if (maskY > stage.offsetHeight - mask.offsetHeight) {
+                maskY = stage.offsetHeight - mask.offsetHeight;
+            }
+
+            mask.style.left = maskX + "px";
+            mask.style.top = maskY + "px";
+
+            preview.style.left = -maskX * 2 + "px";
+            preview.style.top = -maskY * 2 + "px";
+
+
+        };
+
+
+        var select = document.querySelector("select");
+        select.onchange = function () {
+            console.log(this.value, typeof this.value);
+            p.innerText = this.value;
+        };
+
+        // 获取下拉列表元素  
+        var selectElement = document.getElementById('optionSelector');
+
+        // 添加 change 事件监听器  
+        selectElement.addEventListener('change', function () {
+            // 获取所选值  
+            var selectedValue = selectElement.value;
+
+            // 获取所有匹配 .stage .mask 选择器的元素  
+            var masks = document.querySelectorAll('.stage .mask');
+            var imgs = document.querySelectorAll('.preview img');
+
+            // 遍历这些元素并根据所选值修改它们的样式  
+            masks.forEach(function (mask) {
+                switch (selectedValue) {
+                    case '4':
+                        mask.style.width = '100px';
+                        mask.style.height = '100px';
+                        break;
+                    default:
+                        // 如果未选择任何特定选项或选择了一个未处理的选项，可以重置样式  
+                        mask.style.width = '200px'; // 或其他默认值  
+                        mask.style.height = '200px'; // 或其他默认值  
+                        break;
+                }
+            });
+        });
+
+    </script>
+</body>
+</html>
